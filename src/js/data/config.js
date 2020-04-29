@@ -1,4 +1,4 @@
-import TWEEN from 'tween.js';
+import TWEEN from "tween.js";
 
 // This object contains the state of the app
 export default {
@@ -14,14 +14,12 @@ export default {
   easing: TWEEN.Easing.Quadratic.InOut,
   duration: 500,
   model: {
-    path: './assets/models/Teapot.json',
+    path: "./assets/models/Teapot.json",
     scale: 20
   },
   texture: {
-    path: './assets/textures/',
-    imageFiles: [
-      {name: 'UV', image: 'UV_Grid_Sm.jpg'}
-    ]
+    path: "./assets/Textures/",
+    imageFiles: [{ name: "UV", image: "UV_Grid_Sm.jpg" }]
   },
   mesh: {
     enableHelper: false,
@@ -37,13 +35,14 @@ export default {
     near: 0.0008
   },
   camera: {
-    fov: 40,
-    near: 2,
-    far: 1000,
+    rotationOrder: "YXZ",
+    fov: 50,
+    near: 0.1,
+    far: 10000,
     aspect: 1,
     posX: 0,
-    posY: 30,
-    posZ: 40
+    posY: 10,
+    posZ: 100
   },
   controls: {
     autoRotate: true,

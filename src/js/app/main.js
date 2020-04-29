@@ -1,28 +1,30 @@
 // Global imports -
-import * as THREE from 'three';
-import TWEEN from 'tween.js';
+import * as THREE from "three";
+import TWEEN from "tween.js";
 
 // Local imports -
 // Components
-import Renderer from './components/renderer';
-import Camera from './components/camera';
-import Light from './components/light';
-import Controls from './components/controls';
+import Renderer from "./components/renderer";
+import Camera from "./components/camera";
+import Light from "./components/light";
+import Controls from "./components/controls";
+// import Raycaster from "./components/raycaster";
+// import Mouse from "./components/mouse";
 
 // Helpers
-import Geometry from './helpers/geometry';
-import Stats from './helpers/stats';
+import Geometry from "./helpers/geometry";
+import Stats from "./helpers/stats";
 
 // Model
-import Texture from './model/texture';
-import Model from './model/model';
+import Texture from "./model/texture";
+import Model from "./model/model";
 
 // Managers
-import Interaction from './managers/interaction';
-import DatGUI from './managers/datGUI';
+import Interaction from "./managers/interaction";
+import DatGUI from "./managers/datGUI";
 
 // data
-import Config from './../data/config';
+import Config from "./../data/config";
 // -- End of imports
 
 // This class instantiates and ties all of the components together, starts the loading process and renders the main loop
@@ -39,7 +41,7 @@ export default class Main {
     this.scene.fog = new THREE.FogExp2(Config.fog.color, Config.fog.near);
 
     // Get Device Pixel Ratio first for retina
-    if(window.devicePixelRatio) {
+    if (window.devicePixelRatio) {
       Config.dpr = window.devicePixelRatio;
     }
 
@@ -52,16 +54,16 @@ export default class Main {
     this.light = new Light(this.scene);
 
     // Create and place lights in scene
-    const lights = ['ambient', 'directional', 'point', 'hemi'];
+    const lights = ["directional"];
     lights.forEach((light) => this.light.place(light));
 
     // Create and place geo in scene
-    this.geometry = new Geometry(this.scene);
-    this.geometry.make('plane')(150, 150, 10, 10);
-    this.geometry.place([0, -20, 0], [Math.PI / 2, 0, 0]);
+    // this.geometry = new Geometry(this.scene);
+    // this.geometry.make("plane")(150, 150, 10, 10);
+    // this.geometry.place([0, -20, 0], [Math.PI / 2, 0, 0]);
 
     // Set up rStats if dev environment
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       this.stats = new Stats(this.renderer);
       this.stats.setUp();
     }
@@ -76,6 +78,7 @@ export default class Main {
       // Textures loaded, load model
       this.model = new Model(this.scene, this.manager, this.texture.textures);
       this.model.load();
+      console.log(this.model);
 
       // onProgress callback
       this.manager.onProgress = (item, loaded, total) => {
@@ -85,16 +88,16 @@ export default class Main {
       // All loaders done now
       this.manager.onLoad = () => {
         // Set up interaction manager with the app now that the model is finished loading
-        new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
+        // new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera, this.controls.threeControls);
 
         // Add dat.GUI controls if dev
-        if(Config.isDev) {
-          new DatGUI(this, this.model.obj);
-        }
+        // if (Config.isDev) {
+        //   new DatGUI(this, this.model.obj);
+        // }
 
         // Everything is now fully loaded
         Config.isLoaded = true;
-        this.container.querySelector('#loading').style.display = 'none';
+        this.container.querySelector("#loading").style.display = "none";
       };
     });
 
@@ -104,7 +107,7 @@ export default class Main {
 
   render() {
     // Render rStats if Dev
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       Stats.start();
     }
 
@@ -112,7 +115,7 @@ export default class Main {
     this.renderer.render(this.scene, this.camera.threeCamera);
 
     // rStats has finished determining render call now
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       Stats.end();
     }
 
@@ -121,7 +124,7 @@ export default class Main {
 
     // Call any vendor or module frame updates here
     TWEEN.update();
-    this.controls.threeControls.update();
+    // this.controls.threeControls.update();
 
     // RAF
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object
